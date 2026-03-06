@@ -198,16 +198,22 @@
     </form>
 </div>
 
+<!-- Het aangepaste Bedankt-scherm -->
 <div id="bedankt" class="container">
     <img src="Logo ML.png" alt="Logo" class="logo">
     <h1 style="color: #28a745;">✅ Bedankt!</h1>
     <p style="font-size: 18px;">Uw voorkeur is anoniem opgeslagen.</p>
     
-    <button onclick="sluitVenster()" class="close-btn">Dit venster sluiten</button>
+    <div id="sluit-instructie" style="display:none; background-color: #fff3cd; padding: 15px; border: 1px solid #ffeeba; border-radius: 10px; margin: 15px 0;">
+        <p style="font-size: 16px; color: #856404; margin: 0; font-weight: bold;">
+            U bent nu klaar! Gebruik de 'terug'-knop van uw gsm of sluit dit tabblad om terug te keren naar uw e-mail.
+        </p>
+    </div>
+
+    <button id="sluitKnop" onclick="sluitVenster()" class="close-btn">Dit venster sluiten</button>
 
     <p style="font-size: 14px; color: #666; margin-top: 20px; line-height: 1.4;">
-        U kunt dit venster nu veilig afsluiten.<br>
-        Gebruik hiervoor de <b>'terug'-knop</b> van uw gsm of sluit dit tabblad om terug te keren naar uw e-mail.
+        Uw deelname is geregistreerd. U kunt deze pagina nu veilig verlaten.
     </p>
 </div>
 
@@ -257,13 +263,18 @@
     };
 
     function sluitVenster() {
+        // Toon direct de instructie voor het geval het sluiten niet lukt
+        document.getElementById('sluit-instructie').style.display = 'block';
+        document.getElementById('sluitKnop').style.display = 'none';
+
         // Probeer het venster te sluiten
         window.close();
         
-        // Als window.close niet werkt (beveiliging browser), toon dan een melding
+        // Extra veiligheid voor oudere browsers:
         setTimeout(function() {
-            alert("Klik op het kruisje van dit tabblad of gebruik de terug-knop van uw toestel om dit venster te sluiten.");
-        }, 500);
+           // Als we hier nog zijn, is het venster niet gesloten.
+           // De instructie staat nu al in beeld in plaats van de knop.
+        }, 300);
     }
 </script>
 
