@@ -30,7 +30,7 @@
             width: 220px; 
             max-width: 60%; 
             height: auto; 
-            margin: 0 auto 5px auto; /* Minimale marge onder logo */
+            margin: 0 auto 5px auto; 
             display: block;
         }
         
@@ -116,7 +116,21 @@
             margin-top: 10px;
         }
 
-        #bedankt { display: none; padding: 40px 10px; }
+        /* Sluiten knop op bedankt scherm */
+        .close-btn { 
+            width: 100%; 
+            padding: 16px; 
+            font-size: 18px; 
+            font-weight: bold; 
+            color: white; 
+            background-color: #0056b3; 
+            border: none; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            margin-top: 20px;
+        }
+
+        #bedankt { display: none; padding: 25px 15px; }
 
         /* Aanpassingen specifiek voor grotere schermen */
         @media (min-width: 480px) {
@@ -184,11 +198,23 @@
     </form>
 </div>
 
+<!-- Het aangepaste Bedankt-scherm -->
 <div id="bedankt" class="container">
     <img src="Logo ML.png" alt="Logo" class="logo">
     <h1 style="color: #28a745;">✅ Bedankt!</h1>
     <p style="font-size: 18px;">Uw voorkeur is anoniem opgeslagen.</p>
-    <p>U mag dit venster nu sluiten.</p>
+    
+    <div id="sluit-instructie" style="display:none; background-color: #fff3cd; padding: 15px; border: 1px solid #ffeeba; border-radius: 10px; margin: 15px 0;">
+        <p style="font-size: 16px; color: #856404; margin: 0; font-weight: bold;">
+            U bent nu klaar! Gebruik de 'terug'-knop van uw gsm of sluit dit tabblad om terug te keren naar uw e-mail.
+        </p>
+    </div>
+
+    <button id="sluitKnop" onclick="sluitVenster()" class="close-btn">Dit venster sluiten</button>
+
+    <p style="font-size: 14px; color: #666; margin-top: 20px; line-height: 1.4;">
+        Uw deelname is geregistreerd. U kunt deze pagina nu veilig verlaten.
+    </p>
 </div>
 
 <script>
@@ -235,6 +261,21 @@
         document.getElementById('bedankt').style.display = 'block';
         window.scrollTo(0,0);
     };
+
+    function sluitVenster() {
+        // Toon direct de instructie voor het geval het sluiten niet lukt
+        document.getElementById('sluit-instructie').style.display = 'block';
+        document.getElementById('sluitKnop').style.display = 'none';
+
+        // Probeer het venster te sluiten
+        window.close();
+        
+        // Extra veiligheid voor oudere browsers:
+        setTimeout(function() {
+           // Als we hier nog zijn, is het venster niet gesloten.
+           // De instructie staat nu al in beeld in plaats van de knop.
+        }, 300);
+    }
 </script>
 
 </body>
