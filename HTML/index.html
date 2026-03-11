@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bevraging Ledenfeest - Diabetes Liga</title>
+    <style>
+        /* Algemene instellingen */
+        * { box-sizing: border-box; }
+        body { 
+            font-family: Arial, sans-serif; 
+            line-height: 1.4; 
+            color: #333; 
+            max-width: 650px; 
+            margin: 0 auto; 
+            padding: 10px; 
+            background-color: #f4f7f6; 
+            text-align: center; 
+        }
+        .container { 
+            background: white; 
+            padding: 15px; 
+            border-radius: 15px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+            border-top: 8px solid #0056b3; 
+        }
+        
+        /* Logo: minder witruimte onderaan */
+        .logo { 
+            width: 220px; 
+            max-width: 60%; 
+            height: auto; 
+            margin: 0 auto 5px auto; /* Minimale marge onder logo */
+            display: block;
+        }
+        
+        h1 { color: #0056b3; margin: 5px 0; font-size: 22px; }
+        .uitleg { font-size: 16px; margin-bottom: 15px; color: #444; }
+
+        /* Kalender styling: compact op mobiel */
+        .cal-container { 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+            flex-wrap: wrap; 
+        }
+        .mini-cal { 
+            border: 1px solid #ddd; 
+            padding: 8px; 
+            background: #fff; 
+            width: 100%; 
+            max-width: 200px; 
+            border-radius: 8px; 
+        }
+        .cal-titel { 
+            font-weight: bold; 
+            background: #0056b3; 
+            color: white; 
+            padding: 3px; 
+            margin-bottom: 5px; 
+            border-radius: 4px; 
+            font-size: 14px; 
+        }
+        
+        .grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 11px; }
+        .dag-kop { font-weight: bold; color: #888; padding-bottom: 3px; margin-bottom: 3px; border-bottom: 1px solid #eee; }
+        .dag { padding: 4px 0; color: #444; }
+        .leeg { color: #ccc; }
+        
+        /* Groene cirkel voor opties */
+        .optie { 
+            background: #28a745; 
+            color: white !important; 
+            border-radius: 50%; 
+            font-weight: bold; 
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        /* Keuze knoppen: Touch-vriendelijk */
+        .choice-btn { 
+            display: flex; 
+            align-items: center; 
+            background: white; 
+            border: 2px solid #0056b3; 
+            padding: 12px; 
+            margin: 8px 0; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            text-align: left; 
+        }
+        input[type="checkbox"] { 
+            width: 28px; 
+            height: 28px; 
+            margin-right: 15px; 
+            flex-shrink: 0;
+        }
+        .choice-label { font-size: 18px; font-weight: bold; color: #0056b3; }
+
+        /* Verzendknop */
+        .submit-btn { 
+            width: 100%; 
+            padding: 16px; 
+            font-size: 20px; 
+            font-weight: bold; 
+            color: white; 
+            background-color: #28a745; 
+            border: none; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            margin-top: 10px;
+        }
+
+        #bedankt { display: none; padding: 40px 10px; }
+
+        /* Aanpassingen specifiek voor grotere schermen */
+        @media (min-width: 480px) {
+            .logo { width: 280px; margin-bottom: 10px; }
+            h1 { font-size: 26px; }
+            .container { padding: 25px; }
+            .mini-cal { width: 210px; }
+            .grid { font-size: 13px; }
+            .optie { width: 24px; height: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="formulier-box">
+    <img src="Logo ML.png" alt="Diabetes Liga Midden-Limburg" class="logo">
+    
+    <h1>Voorkeurdatum Ledenfeest 2026</h1>
+    <p class="uitleg">Vink de dagen aan die voor u passen.<br>Meerdere keuzes mogelijk.</p>
+
+    <div class="cal-container">
+        <!-- November 2026 (Begint op Zondag) -->
+        <div class="mini-cal">
+            <div class="cal-titel">November 2026</div>
+            <div class="grid">
+                <span class="dag-kop">m</span><span class="dag-kop">d</span><span class="dag-kop">w</span><span class="dag-kop">d</span><span class="dag-kop">v</span><span class="dag-kop">z</span><span class="dag-kop">z</span>
+                <span class="dag leeg"></span><span class="dag leeg"></span><span class="dag leeg"></span><span class="dag leeg"></span><span class="dag leeg"></span><span class="dag leeg"></span><span class="dag">1</span>
+                <span class="dag">2</span><span class="dag">3</span><span class="dag">4</span><span class="dag">5</span><span class="dag">6</span><span class="dag">7</span><span class="dag">8</span>
+                <span class="dag">9</span><span class="dag">10</span><span class="dag">11</span><span class="dag">12</span><span class="dag">13</span><span class="dag">14</span><span class="dag">15</span>
+                <span class="dag">16</span><span class="dag">17</span><span class="dag">18</span><span class="dag">19</span><span class="dag">20</span><span class="dag">21</span><span class="dag">22</span>
+                <span class="dag">23</span><span class="dag">24</span><span class="dag">25</span><span class="dag">26</span><span class="dag">27</span><span class="dag"><span class="optie">28</span></span><span class="dag">29</span>
+                <span class="dag">30</span>
+            </div>
+        </div>
+
+        <!-- December 2026 (Begint op Dinsdag) -->
+        <div class="mini-cal">
+            <div class="cal-titel">December 2026</div>
+            <div class="grid">
+                <span class="dag-kop">m</span><span class="dag-kop">d</span><span class="dag-kop">w</span><span class="dag-kop">d</span><span class="dag-kop">v</span><span class="dag-kop">z</span><span class="dag-kop">z</span>
+                <span class="dag leeg"></span><span class="dag">1</span><span class="dag">2</span><span class="dag">3</span><span class="dag">4</span><span class="dag">5</span><span class="dag">6</span>
+                <span class="dag">7</span><span class="dag">8</span><span class="dag">9</span><span class="dag">10</span><span class="dag">11</span><span class="dag"><span class="optie">12</span></span><span class="dag">13</span>
+                <span class="dag">14</span><span class="dag">15</span><span class="dag">16</span><span class="dag">17</span><span class="dag">18</span><span class="dag"><span class="optie">19</span></span><span class="dag">20</span>
+                <span class="dag">21</span><span class="dag">22</span><span class="dag">23</span><span class="dag">24</span><span class="dag">25</span><span class="dag">26</span><span class="dag">27</span>
+                <span class="dag">28</span><span class="dag">29</span><span class="dag">30</span><span class="dag">31</span>
+            </div>
+        </div>
+    </div>
+
+    <form id="bevragingForm">
+        <label class="choice-btn">
+            <input type="checkbox" name="datum" value="28 november">
+            <span class="choice-label">Zaterdag 28 november</span>
+        </label>
+        <label class="choice-btn">
+            <input type="checkbox" name="datum" value="12 december">
+            <span class="choice-label">Zaterdag 12 december</span>
+        </label>
+        <label class="choice-btn">
+            <input type="checkbox" name="datum" value="19 december">
+            <span class="choice-label">Zaterdag 19 december</span>
+        </label>
+
+        <button type="submit" class="submit-btn">Verstuur mijn keuze</button>
+    </form>
+</div>
+
+<div id="bedankt" class="container">
+    <img src="Logo ML.png" alt="Logo" class="logo">
+    <h1 style="color: #28a745;">✅ Bedankt!</h1>
+    <p style="font-size: 18px;">Uw voorkeur is anoniem opgeslagen.</p>
+    <p>U mag dit venster nu sluiten.</p>
+</div>
+
+<script>
+    const GOOGLE_FORM_ID = "1FAIpQLSfmmb26SacMWtcR9j2awLclyIJ1am3frj5yaP0fYM93CTW6Sw";
+    const ENTRY_ID = "entry.1752205732"; 
+
+    const form = document.getElementById('bevragingForm');
+    
+    form.onsubmit = function(e) {
+        e.preventDefault();
+        
+        const checked = document.querySelectorAll('input[name="datum"]:checked');
+        if (checked.length === 0) {
+            alert("Vink a.u.b. eerst een datum aan.");
+            return;
+        }
+
+        const geselecteerdeDatums = Array.from(checked).map(cb => cb.value).join(", ");
+        
+        const vliegensvlugForm = document.createElement('form');
+        vliegensvlugForm.method = 'POST';
+        vliegensvlugForm.action = `https://docs.google.com/forms/d/e/${GOOGLE_FORM_ID}/formResponse`;
+        vliegensvlugForm.target = 'onzichtbaar_venster';
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = ENTRY_ID;
+        input.value = geselecteerdeDatums;
+
+        vliegensvlugForm.appendChild(input);
+        document.body.appendChild(vliegensvlugForm);
+
+        if(!document.getElementById('onzichtbaar_venster')){
+            const iframe = document.createElement('iframe');
+            iframe.name = 'onzichtbaar_venster';
+            iframe.id = 'onzichtbaar_venster';
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+        }
+
+        vliegensvlugForm.submit();
+
+        document.getElementById('formulier-box').style.display = 'none';
+        document.getElementById('bedankt').style.display = 'block';
+        window.scrollTo(0,0);
+    };
+</script>
+
+</body>
+</html>
