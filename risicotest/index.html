@@ -28,7 +28,6 @@ input[type=number],input[type=date],textarea{font:inherit;width:100%;min-height:
 <section class="panel" id="result" aria-labelledby="resultTitle" hidden>
 <div class="result-top"><strong>Je test is klaar</strong><span id="date"></span></div><p class="score"><strong id="score">0</strong> <span>/ 26 punten</span></p><span class="risk" id="risk"></span>
 <h2 id="resultTitle" tabindex="-1"></h2><p id="advice"></p>
-<div id="contributions" class="contributions"></div>
 <h3 class="section-title">Wat jouw antwoorden vertellen</h3><div id="personalInsights" class="insights"></div>
 <p class="result-note">Dit is een risico-inschatting, geen diagnose. Ook een lage score sluit diabetes niet uit. Bij klachten of twijfel: raadpleeg je huisarts.</p>
 <div class="result-actions"><button class="primary" id="save" type="button">Download mijn persoonlijke verslag</button></div>
@@ -37,7 +36,7 @@ input[type=number],input[type=date],textarea{font:inherit;width:100%;min-height:
 <details id="answerDetails"><summary>Bekijk mijn antwoorden</summary><ul class="breakdown" id="breakdown"></ul><button class="text-button" id="edit" type="button">Antwoorden aanpassen</button>
 <button class="text-button" id="restart" type="button">Nieuwe test starten</button><div id="restartConfirm" hidden><p>Je huidige antwoorden worden gewist.</p><div class="restart"><button id="confirmRestart" class="secondary" type="button">Ja, opnieuw</button><button id="cancelRestart" class="text-button" type="button">Annuleren</button></div></div></details>
 </section>
-<footer class="footer"><p>Hulp nodig? Spreek gerust een medewerker aan op onze stand.</p><details><summary>Over deze test en je privacy</summary><p>De vragen en puntentelling volgen de HALT2Diabetes/FINDRISC-folder. Je antwoorden blijven in dit geopende tabblad; de test bewaart ze niet in cookies of browseropslag. De uitleg en tips worden afgestemd op je ingevulde antwoorden.</p><p>De PDF wordt op je toestel gemaakt. Je antwoorden en verslag worden niet naar onze vereniging verstuurd. Bewaar je verslag op je eigen toestel en deel het alleen met wie jij kiest.</p><p><a href="https://www.diabetes.be/sites/default/files/2020-10/HALT2Diabetes_FINDRISC_Versie1.pdf" target="_blank" rel="noopener noreferrer">Bron: risicotest Diabetes Liga</a></p></details></footer>
+<footer class="footer"><p>Hulp nodig? Spreek gerust een medewerker aan op onze stand.</p><details><summary>Over deze test en je privacy</summary><p>De vragen volgen de HALT2Diabetes/FINDRISC-folder. Je antwoorden blijven in dit geopende tabblad; de test bewaart ze niet in cookies of browseropslag. De uitleg en tips worden afgestemd op je ingevulde antwoorden.</p><p>De PDF wordt op je toestel gemaakt. Je antwoorden en verslag worden niet naar onze vereniging verstuurd. Bewaar je verslag op je eigen toestel en deel het alleen met wie jij kiest.</p><p><a href="https://www.diabetes.be/sites/default/files/2020-10/HALT2Diabetes_FINDRISC_Versie1.pdf" target="_blank" rel="noopener noreferrer">Bron: risicotest Diabetes Liga</a></p></details></footer>
 </main><script>const questions = [
       {
         id: "age",
@@ -139,14 +138,14 @@ input[type=number],input[type=date],textarea{font:inherit;width:100%;min-height:
 function personalReport(a,score){
  const p=id=>a[id]?.points||0;
  const items=[
- {id:'glucose',title:'Eerder verhoogde bloedsuiker',text:p('glucose')?'Je meldt dat je bloedsuiker ooit verhoogd was. Bespreek dit met je huisarts, ook als je totaalscore lager dan 12 is. Vraag welke controle voor jou nodig is.':'Je meldt geen eerder vastgestelde verhoogde bloedsuiker. Dat zegt niet hoe je bloedsuiker vandaag is: deze vragenlijst vervangt geen bloedonderzoek.',priority:p('glucose')?100:0},
- {id:'bloodpressure',title:'Bloeddruk en opvolging',text:p('bloodpressure')?'Je gebruikt of gebruikte bloeddrukmedicatie. Dat telt mee in deze test; het betekent niet dat de medicatie diabetes veroorzaakt. Bespreek je bloeddrukopvolging met je huisarts en verander je medicatie niet zelf.':'Je meldt geen gebruik van bloeddrukmedicatie. Daaruit kunnen we niet besluiten dat je bloeddruk normaal is. Bespreek bij twijfel of een controle nodig is.',priority:p('bloodpressure')?90:0},
+ {id:'glucose',title:'Eerder verhoogde bloedsuiker',text:p('glucose')?'Je meldt dat je bloedsuiker ooit verhoogd was. Bespreek dit met je huisarts, ook bij een lage totaalscore. Vraag welke controle voor jou nodig is.':'Je meldt geen eerder vastgestelde verhoogde bloedsuiker. Dat zegt niet hoe je bloedsuiker vandaag is: deze vragenlijst vervangt geen bloedonderzoek.',priority:p('glucose')?100:0},
+ {id:'bloodpressure',title:'Bloeddruk en opvolging',text:p('bloodpressure')?'Je gebruikt of gebruikte bloeddrukmedicatie. Bespreek je bloeddrukopvolging met je huisarts en verander je medicatie niet zelf.':'Je meldt geen gebruik van bloeddrukmedicatie. Daaruit kunnen we niet besluiten dat je bloeddruk normaal is. Bespreek bij twijfel of een controle nodig is.',priority:p('bloodpressure')?90:0},
  {id:'activity',title:p('activity')?'Meer bewegen, haalbaar beginnen':'Blijf dagelijks bewegen',text:p('activity')?'Je geeft aan niet dagelijks een half uur te bewegen. Begin bijvoorbeeld met een korte wandeling op een vast moment en bouw rustig op. Kies iets dat bij je mogelijkheden past en onderbreek lang zitten.':'Je geeft aan dagelijks minstens een half uur te bewegen. Houd die gewoonte vast. Wissel ook gedurende de dag zitten af met staan of een kort beweegmoment.',priority:p('activity')?80:0},
  {id:'food',title:p('food')?'Groenten en fruit vaker op het menu':'Bouw verder op je eetgewoonte',text:p('food')?'Je eet volgens je antwoord niet dagelijks groenten en fruit. Kies een haalbare eerste stap: groenten bij een vaste maaltijd en fruit als tussendoortje. Wissel af en kies vaker vezelrijke, weinig bewerkte producten.':'Je eet volgens je antwoord dagelijks groenten en fruit. Dat is een goede basis. Varieer daarnaast met vezelrijke producten en drink vooral water. Deze ene vraag beoordeelt niet je volledige voeding.',priority:p('food')?75:0},
- {id:'bmi',title:'Gewicht in verhouding tot je lengte',text:p('bmi')?'Je berekende BMI levert punten op in deze test. BMI is een hulpmiddel, geen volledige beoordeling van je gezondheid. Bespreek met je huisarts of diëtist welk gewicht en welke haalbare veranderingen bij jou passen.':'Je berekende BMI ligt onder 25 en levert geen punten op. Een lage BMI is niet automatisch een gezond gewicht. Eet voldoende en gevarieerd; vraag advies bij onbedoeld gewichtsverlies of twijfel.',priority:p('bmi')?65:0},
- {id:'waist',title:'Je buikomtrek',text:p('waist')?'Je opgegeven buikomtrek valt in een categorie die punten oplevert. Meet bij twijfel opnieuw met hulp aan de stand. Bespreek het resultaat samen met je BMI; gezonde eet- en beweeggewoontes zijn een bruikbaar vertrekpunt.':'Je opgegeven buikomtrek valt in de categorie zonder punten. Blijf aandacht houden voor voeding en beweging. Een gunstige buikomtrek sluit diabetes op zichzelf niet uit.',priority:p('waist')?60:0},
- {id:'heredity',title:'Diabetes in de familie',text:p('heredity')?'Je meldt diabetes in de familie. Dat telt mee, maar betekent niet dat je zelf zeker diabetes krijgt. Je familiegeschiedenis kun je niet veranderen; je leefstijl en tijdige opvolging verdienen wel aandacht.':'Je meldt geen familieleden met diabetes. Ook zonder bekende familiegeschiedenis kan diabetes ontstaan. Kijk daarom naar het geheel van je antwoorden.',priority:p('heredity')?50:0},
- {id:'age',title:'Leeftijd als achtergrondfactor',text:p('age')?'Je leeftijdscategorie draagt bij aan de score. Leeftijd kun je niet veranderen en is geen verwijt. Gebruik deze informatie om samen met je huisarts te bepalen welke opvolging passend is.':'Je leeftijdscategorie levert geen punten op. Jonger zijn sluit diabetes niet uit; andere antwoorden en eventuele klachten blijven belangrijk.',priority:p('age')?40:0}
+ {id:'bmi',title:'Gewicht in verhouding tot je lengte',text:p('bmi')?'BMI is een hulpmiddel, geen volledige beoordeling van je gezondheid. Bespreek met je huisarts of diëtist welk gewicht en welke haalbare veranderingen bij jou passen.':'Je berekende BMI ligt onder 25. Een lage BMI is niet automatisch een gezond gewicht. Eet voldoende en gevarieerd; vraag advies bij onbedoeld gewichtsverlies of twijfel.',priority:p('bmi')?65:0},
+ {id:'waist',title:'Je buikomtrek',text:p('waist')?'Meet bij twijfel opnieuw met hulp aan de stand. Bespreek het resultaat samen met je BMI; gezonde eet- en beweeggewoontes zijn een bruikbaar vertrekpunt.':'Blijf aandacht houden voor voeding en beweging. Een gunstige buikomtrek sluit diabetes op zichzelf niet uit.',priority:p('waist')?60:0},
+ {id:'heredity',title:'Diabetes in de familie',text:p('heredity')?'Je meldt diabetes in de familie. Dat betekent niet dat je zelf zeker diabetes krijgt. Je familiegeschiedenis kun je niet veranderen; je leefstijl en tijdige opvolging verdienen wel aandacht.':'Je meldt geen familieleden met diabetes. Ook zonder bekende familiegeschiedenis kan diabetes ontstaan. Kijk daarom naar het geheel van je antwoorden.',priority:p('heredity')?50:0},
+ {id:'age',title:'Leeftijd als achtergrondfactor',text:p('age')?'Leeftijd kun je niet veranderen en is geen verwijt. Gebruik deze informatie om samen met je huisarts te bepalen welke opvolging passend is.':'Jonger zijn sluit diabetes niet uit; andere antwoorden en eventuele klachten blijven belangrijk.',priority:p('age')?40:0}
  ];
  const focus=items.filter(x=>x.priority>0).sort((a,b)=>b.priority-a.priority).slice(0,3);
  if(!focus.length)focus.push(items.find(x=>x.id==='activity'),items.find(x=>x.id==='food'));
@@ -174,15 +173,13 @@ async function createResultPDF(score,date,result,answerData){
  newPage('Jouw resultaat en aandachtspunten',1);
  rect(44,120,W,100,pale);text(String(score),62,128,56,bold,dark);text('/ 26 punten',65,190,11,normal,muted);text(result.name,190,143,18,bold);text(result.zone,190,176,11,normal,muted);y=242;
  heading('Wat betekent dit voor jou?');para(profile.next,12);
- para('Deze score bundelt de risicofactoren uit je antwoorden. Het is geen bloedsuikerwaarde, geen percentage en geen diagnose. Ook een lage score sluit diabetes niet uit.',10,muted);
+ para('Deze test geeft een risico-inschatting, geen diagnose. Ook een lage score sluit diabetes niet uit.',10,muted);
  heading('Dit valt op in jouw antwoorden');
  for(const item of profile.focus)block(item.title,item.text);
  para('Bij klachten of twijfel: raadpleeg je huisarts. Dit verslag helpt het gesprek voorbereiden en vervangt geen medisch onderzoek of persoonlijk behandeladvies.',10,muted);
- newPage('Jouw antwoorden en punten',2);
+ newPage('Jouw antwoorden',2);
  para('Dit heb je ingevuld. Controleer het overzicht; een vergissing kun je in de test verbeteren voordat je een nieuw verslag bewaart.',11);
- for(const q of questions){const a=answerData[q.id];const ls=wrap(a.text,438,11);const h=27+ls.length*15;rect(44,y,W,h,pale);text(q.label,55,y+7,11,bold);text(a.points+' p.',510,y+7,11,bold,dark);ls.forEach((line,i)=>text(line,55,y+26+i*15,11));y+=h+10;}
- text('Totaal: '+score+' / 26 punten',44,y+2,15,bold,dark);y+=35;
- para('De punten komen uit de officiële test; ze drukken niet uit hoeveel elke factor afzonderlijk jouw persoonlijke risico veroorzaakt. Leeftijd en familiegeschiedenis zijn niet veranderbaar.',10,muted);
+ for(const q of questions){const a=answerData[q.id];const ls=wrap(a.text,438,11);const h=27+ls.length*15;rect(44,y,W,h,pale);text(q.label,55,y+7,11,bold);ls.forEach((line,i)=>text(line,55,y+26+i*15,11));y+=h+10;}
  newPage('Haalbare stappen voor jouw leefstijl',3);
  para('Deze tips sluiten aan op jouw antwoorden. Kies één verandering die bij je dagelijkse leven en lichamelijke mogelijkheden past. Kleine stappen zijn gemakkelijker vol te houden.',11);
  for(const id of ['activity','food','bmi','waist']){const item=profile.items.find(x=>x.id===id);block(item.title,item.text);}
@@ -246,9 +243,8 @@ function showResult(){
  const score=total(),r=resultFor(score),profile=personalReport(answers,score);
  resultDate=new Date().toLocaleDateString('nl-BE');document.body.classList.add('result-view');$('answerDetails').open=false;$('test').hidden=true;$('testNote').hidden=true;$('result').hidden=false;
  $('score').textContent=score;$('date').textContent=resultDate;$('risk').textContent=r.name;$('risk').className='risk '+r.level;$('resultTitle').textContent=r.title;$('advice').textContent=profile.next;
- $('contributions').innerHTML=profile.contributors.length?'<strong>Deze antwoorden leveren punten op:</strong><div class="point-tags">'+profile.contributors.map(c=>`<span>${escapeHTML(questions.find(q=>q.id===c.id).label.replace(/^\d+\.\s*/,''))} · ${c.points} p.</span>`).join('')+'</div>':'<p>Geen van je antwoorden levert punten op in deze test. Dat is geen garantie dat je geen diabetes hebt.</p>';
  $('personalInsights').innerHTML=profile.focus.map(item=>`<article><h4>${escapeHTML(item.title)}</h4><p>${escapeHTML(item.text)}</p></article>`).join('');
- $('breakdown').innerHTML=questions.map(q=>`<li><strong>${escapeHTML(q.label)} · ${answers[q.id].points} p.</strong><span>${escapeHTML(answers[q.id].text)}</span></li>`).join('');$('saveStatus').textContent='';$('restartConfirm').hidden=true;$('resultTitle').focus({preventScroll:true});window.scrollTo(0,0);
+ $('breakdown').innerHTML=questions.map(q=>`<li><strong>${escapeHTML(q.label)}</strong><span>${escapeHTML(answers[q.id].text)}</span></li>`).join('');$('saveStatus').textContent='';$('restartConfirm').hidden=true;$('resultTitle').focus({preventScroll:true});window.scrollTo(0,0);
 }
 $('questionForm').addEventListener('submit',event=>{event.preventDefault();if(!validate())return;if(current<7){current++;render();}else showResult();});
 $('prev').addEventListener('click',()=>{if(current>0){current--;render();}});
@@ -261,4 +257,5 @@ async function savePDF(){
   try{const bytes=await createResultPDF(total(),resultDate,resultFor(total()),answers);const blob=new Blob([bytes],{type:'application/pdf'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Mijn-persoonlijke-risicoverslag.pdf';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);$('saveStatus').textContent='Je verslag heet Mijn-persoonlijke-risicoverslag.pdf. Kijk bij Downloads of Bestanden op je toestel; sommige browsers openen eerst een voorbeeld om te bewaren.';}catch(error){$('saveStatus').textContent='De PDF kon niet worden gemaakt. Probeer het opnieuw.';}finally{button.disabled=false;}
 }
 $('save').addEventListener('click',savePDF);
-render(false);</script></body></html>
+render(false);
+</script></body></html>
