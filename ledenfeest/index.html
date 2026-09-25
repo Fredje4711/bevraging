@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kies 10 vragen — Ledenfeest Diabetes Liga Midden-Limburg</title>
+<style>
+:root{color-scheme:light;--blue:#085577;--ink:#192f3b;--muted:#4c6571;--line:#c3d6df;--green:#146641}
+*{box-sizing:border-box}body{margin:0;background:#eef4f6;color:var(--ink);font:19px/1.6 system-ui,Segoe UI,sans-serif}
+header{background:var(--blue);color:white;padding:36px max(20px,calc((100% - 980px)/2))}
+header p{margin:0}h1{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.2;margin:10px 0}h2{line-height:1.3;font-size:1.5rem}h3{line-height:1.4;font-size:1.2rem;margin:8px 0 16px}
+main{max-width:1020px;margin:auto;padding:24px 20px 60px}.intro,.question,.finish{border:1px solid var(--line);background:white;border-radius:14px;padding:24px;margin-bottom:20px}
+.intro ol{padding-left:25px}a{color:var(--blue)}.small{font-size:.9rem;color:var(--muted)}.hint{background:#edf6fa;padding:14px 18px;border-radius:8px}
+.toolbar{position:sticky;top:0;z-index:2;background:#fff;border:2px solid var(--blue);border-radius:10px;padding:10px 18px;box-shadow:0 3px 12px #182c3920;display:flex;gap:10px 20px;align-items:center;justify-content:space-between}
+#count{font-size:1.15rem}#status{margin:10px 0;min-height:1.6em;color:var(--blue)}
+.section-title{margin:32px 0 18px}.meta{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;color:var(--muted);font-size:.9rem}
+.badge{background:#fff0d5;color:#704500;padding:0 10px;border-radius:20px}
+.question.chosen{border:2px solid var(--green);background:#f4fcf7;padding:23px}
+.options{list-style:none;margin:0 0 18px;padding:0;display:grid;gap:8px}.options li{display:flex;gap:12px}.letter{font-weight:750;color:var(--blue);flex:0 0 24px}
+.pick{display:flex;align-items:center;gap:12px;font-weight:700;padding:12px;background:#e8f2f7;border-radius:8px;cursor:pointer}
+.pick input{width:26px;height:26px;accent-color:var(--green);flex-shrink:0}
+details{margin-top:14px}summary{cursor:pointer;color:var(--blue);padding:5px 0}details p{background:#f0f6f3;border-left:4px solid var(--green);padding:10px 15px}
+label.field{display:block;font-weight:650;margin:16px 0 5px}input[type=text],textarea{width:100%;font:inherit;padding:10px;border:1px solid #7996a5;border-radius:7px}
+button,.jump{font:inherit;font-weight:650;padding:12px 18px;min-height:48px;border-radius:8px;cursor:pointer}
+button{background:var(--blue);color:white;border:2px solid var(--blue)}button:disabled{background:#e5ebee;color:#526671;border-color:#b7c9d1;cursor:not-allowed}
+.secondary{background:white;color:var(--blue)}.jump{font-size:.9rem;padding:5px 10px;min-height:auto}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,textarea:focus-visible{outline:3px solid #b65d00;outline-offset:4px}
+#finish{scroll-margin-top:110px}#selectedList{padding-left:26px}.export-box{margin-top:20px}footer{font-size:.85rem;color:var(--muted);margin-top:24px}
+[hidden]{display:none!important}@media(max-width:600px){body{font-size:17px}.intro,.question,.finish{padding:17px}.question.chosen{padding:16px}.toolbar{padding:8px 12px}.jump{font-size:.8rem}.actions{flex-direction:column}h2{font-size:1.3rem}}
+@media print{header{background:white;color:black;padding:0}body{background:white;font-size:12pt}main{padding:0}.toolbar,.intro,.pick,button,.jump,#status,.export-box{display:none}.question:not(.chosen){display:none}.question{break-inside:avoid}.section-title{display:none}}
+</style>
+</head>
+<body>
+<header><p>Diabetes Liga Midden-Limburg · Ledenfeest</p><h1>Kies 10 uit deze 20 vragen</h1></header>
+<main>
+
+<div class="toolbar"><strong id="count" role="status" aria-live="polite">0 van 10 gekozen</strong><button id="exportText" disabled>Sla mijn 10 vragen op</button></div>
+<p id="status" role="status" aria-live="polite"></p>
+<noscript><p>Open dit bestand in Chrome, Edge of Safari met JavaScript ingeschakeld om vragen te kunnen kiezen.</p></noscript>
+<div id="questions"></div>
+
+
+</main>
+<script type="application/json" id="questionData">[
+  {
+    "id": "q003",
+    "question": "Wat is een veelvoorkomend symptoom van onbehandelde diabetes?",
+    "options": [
+      "Gewichtstoename",
+      "Veel dorst en vaak plassen",
+      "Lage bloeddruk",
+      "Energieoverschot"
+    ],
+    "correctOption": 1,
+    "explanation": "",
+    "group": "Herkenbare basis",
+    "challenge": false
+  },
+  {
+    "id": "q007",
+    "question": "Welk orgaan produceert insuline?",
+    "options": [
+      "Lever",
+      "Nieren",
+      "Alvleesklier (Pancreas)",
+      "Milt"
+    ],
+    "correctOption": 2,
+    "explanation": "",
+    "group": "Herkenbare basis",
+    "challenge": false
+  },
+  {
+    "id": "q013",
+    "question": "Wat is een 'hypo'?",
+    "options": [
+      "Een te hoge bloedsuiker",
+      "Een aanval van hoofdpijn",
+      "Een te lage bloedsuiker",
+      "Een type insuline"
+    ],
+    "correctOption": 2,
+    "explanation": "",
+    "group": "Herkenbare basis",
+    "challenge": false
+  },
+  {
+    "id": "q027",
+    "question": "Wat is een 'hyper'?",
+    "options": [
+      "Een te lage bloedsuiker",
+      "Een allergische reactie",
+      "Een te hoge bloedsuiker",
+      "Een snelle hartslag"
+    ],
+    "correctOption": 2,
+    "explanation": "",
+    "group": "Herkenbare basis",
+    "challenge": false
+  },
+  {
+    "id": "q033",
+    "question": "Wat is een belangrijk onderdeel van de behandeling van Type 1 diabetes?",
+    "options": [
+      "Alleen dieet",
+      "Alleen lichaamsbeweging",
+      "Insulinetherapie (injecties of pomp)",
+      "Alleen orale medicatie"
+    ],
+    "correctOption": 2,
+    "explanation": "",
+    "group": "Herkenbare basis",
+    "challenge": false
+  },
+  {
+    "id": "q010",
+    "question": "Wat is een gezonde gewoonte voor mensen met diabetes?",
+    "options": [
+      "Regelmatig maaltijden overslaan",
+      "Veel suikerhoudende dranken drinken",
+      "Regelmatige lichaamsbeweging",
+      "Een zittende levensstijl"
+    ],
+    "correctOption": 2,
+    "explanation": "",
+    "group": "Dagelijkse gewoonten",
+    "challenge": false
+  },
+  {
+    "id": "q014",
+    "question": "Welke voedingsstof heeft de grootste directe invloed op de bloedsuikerspiegel?",
+    "options": [
+      "Eiwitten",
+      "Vetten",
+      "Koolhydraten",
+      "Vitamines"
+    ],
+    "correctOption": 2,
+    "explanation": "",
+    "group": "Dagelijkse gewoonten",
+    "challenge": false
+  },
+  {
+    "id": "q017",
+    "question": "Waarom is regelmatige voetcontrole belangrijk bij diabetes?",
+    "options": [
+      "Om eelt te verwijderen",
+      "Vanwege verminderd gevoel en slechtere wondgenezing",
+      "Omdat voeten sneller groeien",
+      "Om de bloeddruk te meten"
+    ],
+    "correctOption": 1,
+    "explanation": "",
+    "group": "Dagelijkse gewoonten",
+    "challenge": false
+  },
+  {
+    "id": "q024",
+    "question": "Welke van deze dranken is meestal de beste keuze voor hydratatie bij diabetes?",
+    "options": [
+      "Vruchtensap",
+      "Cola met suiker",
+      "Water of thee zonder suiker",
+      "Energiedrank"
+    ],
+    "correctOption": 2,
+    "explanation": "",
+    "group": "Dagelijkse gewoonten",
+    "challenge": false
+  },
+  {
+    "id": "q038",
+    "question": "Wat is een kenmerk van vezelrijke voeding?",
+    "options": [
+      "Het verhoogt de bloedsuiker snel",
+      "Het kan helpen de bloedsuiker stabieler te houden",
+      "Het bevat meestal veel verzadigd vet",
+      "Het is alleen te vinden in vlees"
+    ],
+    "correctOption": 1,
+    "explanation": "",
+    "group": "Dagelijkse gewoonten",
+    "challenge": false
+  },
+  {
+    "id": "q008",
+    "question": "Wat meet de HbA1c-test?",
+    "options": [
+      "De bloedsuiker op één moment",
+      "Het cholesterolgehalte",
+      "De gemiddelde bloedsuiker over de laatste 2-3 maanden",
+      "De nierfunctie"
+    ],
+    "correctOption": 2,
+    "explanation": "",
+    "group": "Even bij stilstaan",
+    "challenge": true
+  },
+  {
+    "id": "q011",
+    "question": "Wat betekent 'insulineresistentie', vaak geassocieerd met Type 2 diabetes?",
+    "options": [
+      "Het lichaam maakt te veel insuline aan.",
+      "Het lichaam reageert niet goed meer op insuline.",
+      "Het lichaam heeft een allergie voor insuline.",
+      "Het lichaam breekt insuline te snel af."
+    ],
+    "correctOption": 1,
+    "explanation": "",
+    "group": "Even bij stilstaan",
+    "challenge": true
+  },
+  {
+    "id": "q025",
+    "question": "Wat is het effect van stresshormonen (zoals cortisol) op de bloedsuiker?",
+    "options": [
+      "Ze verlagen de bloedsuiker altijd",
+      "Ze hebben geen effect op de bloedsuiker",
+      "Ze kunnen de bloedsuiker verhogen",
+      "Ze verbeteren de insulinegevoeligheid"
+    ],
+    "correctOption": 2,
+    "explanation": "",
+    "group": "Even bij stilstaan",
+    "challenge": false
+  },
+  {
+    "id": "q031",
+    "question": "Wat is 'prediabetes'?",
+    "options": [
+      "Een garantie dat je Type 2 krijgt",
+      "Een voorstadium waarbij bloedsuikerwaarden verhoogd zijn",
+      "Een andere naam voor Type 1",
+      "Diabetes die vanzelf overgaat"
+    ],
+    "correctOption": 1,
+    "explanation": "",
+    "group": "Even bij stilstaan",
+    "challenge": false
+  },
+  {
+    "id": "q034",
+    "question": "Welke risicofactor voor Type 2 diabetes kun je NIET beïnvloeden?",
+    "options": [
+      "Gewicht",
+      "Lichaamsbeweging",
+      "Voeding",
+      "Leeftijd en genetische aanleg"
+    ],
+    "correctOption": 3,
+    "explanation": "",
+    "group": "Even bij stilstaan",
+    "challenge": false
+  },
+  {
+    "id": "q019",
+    "question": "Wat is het doel van het tellen van koolhydraten?",
+    "options": [
+      "Om af te vallen",
+      "Om de insulinedosis beter af te stemmen op de maaltijd",
+      "Om meer eiwitten te eten",
+      "Om vetten te vermijden"
+    ],
+    "correctOption": 1,
+    "explanation": "",
+    "group": "Een stapje verder",
+    "challenge": false
+  },
+  {
+    "id": "q028",
+    "question": "Welke complicatie van diabetes treft de ogen?",
+    "options": [
+      "Neuropathie",
+      "Retinopathie",
+      "Nefropathie",
+      "Gastroparese"
+    ],
+    "correctOption": 1,
+    "explanation": "",
+    "group": "Een stapje verder",
+    "challenge": true
+  },
+  {
+    "id": "q029",
+    "question": "Wat is het primaire doel van een insulinepomp?",
+    "options": [
+      "Bloedsuiker meten",
+      "Continu insuline afgeven en bolussen voor maaltijden",
+      "Alleen langwerkende insuline geven",
+      "Koolhydraten tellen"
+    ],
+    "correctOption": 1,
+    "explanation": "",
+    "group": "Een stapje verder",
+    "challenge": false
+  },
+  {
+    "id": "q046",
+    "question": "Welk effect heeft regelmatige krachttraining op diabetesmanagement?",
+    "options": [
+      "Het verhoogt de insulineresistentie",
+      "Het verbetert de insulinegevoeligheid en spiermassa",
+      "Het heeft geen effect",
+      "Het is afgeraden bij diabetes"
+    ],
+    "correctOption": 1,
+    "explanation": "",
+    "group": "Een stapje verder",
+    "challenge": false
+  },
+  {
+    "id": "q047",
+    "question": "Wat is de functie van glucagon?",
+    "options": [
+      "Het verlaagt de bloedsuiker",
+      "Het verhoogt de bloedsuiker (o.a. door leverglucose vrij te maken)",
+      "Het reguleert de bloeddruk",
+      "Het helpt bij de spijsvertering"
+    ],
+    "correctOption": 1,
+    "explanation": "",
+    "group": "Een stapje verder",
+    "challenge": true
+  }
+]</script>
+<script>
+"use strict";
+const questions = JSON.parse(document.getElementById("questionData").textContent);
+const selected = new Set();
+const $ = id => document.getElementById(id);
+const letters = "ABCD";
+function el(tag, text, className) { const n=document.createElement(tag); if(text!==undefined)n.textContent=text;if(className)n.className=className;return n; }
+function selectionText() {
+ const list=questions.filter(q=>selected.has(q.id));
+ const lines=["QUIZKEUZE LEDENFEEST — DIABETES LIGA MIDDEN-LIMBURG","Gekozen voorstelnummers: "+list.map(q=>questions.indexOf(q)+1).join(", "),""];
+ list.forEach((q,i)=>{lines.push((i+1)+". Voorstel "+(questions.indexOf(q)+1)+" — bron "+q.id,q.question,...q.options.map((o,j)=>letters[j]+". "+o),"Juiste antwoord: "+letters[q.correctOption]+". "+q.options[q.correctOption],"");});
+ return lines.join("\r\n");
+}
+function refresh() {
+ const size=selected.size;
+ $("count").textContent=size+" van 10 gekozen";
+ $("exportText").disabled=size!==10;
+ for(const q of questions){
+  const chosen=selected.has(q.id);
+  $("pick-"+q.id).checked=chosen;
+  $("card-"+q.id).classList.toggle("chosen",chosen);
+ }
+}
+let group="";
+questions.forEach((q,i)=>{
+ if(q.group!==group){group=q.group;$("questions").append(el("h2",group,"section-title"));}
+ const card=el("article",undefined,"question");card.id="card-"+q.id;
+ const meta=el("div",undefined,"meta");meta.append(el("span","Voorstel "+String(i+1).padStart(2,"0")+" / 20"));
+ if(q.challenge)meta.append(el("span","Iets moeilijker","badge"));
+ const heading=el("h3",q.question);heading.id="title-"+q.id;card.setAttribute("aria-labelledby",heading.id);
+ const options=el("ul",undefined,"options");
+ q.options.forEach((o,j)=>{const li=el("li");li.append(el("span",letters[j]+".","letter"),el("span",o));options.append(li);});
+ const label=el("label",undefined,"pick");const box=el("input");box.type="checkbox";box.id="pick-"+q.id;box.setAttribute("aria-label","Kies voorstel "+(i+1)+": "+q.question);
+ box.addEventListener("change",()=>{
+  if(box.checked && selected.size>=10){box.checked=false;$("status").textContent="U hebt al 10 vragen gekozen. Vink eerst een andere vraag uit.";return;}
+  if(box.checked)selected.add(q.id);else selected.delete(q.id);
+  $("status").textContent=selected.size===10?"Uw 10 vragen zijn klaar om op te slaan.":"Keuze aangepast: "+selected.size+" van 10 vragen.";
+  refresh();
+ });
+ label.append(box,el("span","Deze vraag kiezen"));
+ const detail=el("details");detail.append(el("summary","Juiste antwoord bekijken"),el("p",letters[q.correctOption]+". "+q.options[q.correctOption]));
+ card.append(meta,heading,options,label,detail);$("questions").append(card);
+});
+function download(content,type,filename){
+ const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=el("a");a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);
+}
+function stamp(){return new Date().toISOString().slice(0,10);}
+$("exportText").addEventListener("click",()=>{
+ if(selected.size!==10)return;
+ try{download("\uFEFF"+selectionText(),"text/plain;charset=utf-8","quizkeuze-ledenfeest-"+stamp()+".txt");$("status").textContent="Download gestart: quizkeuze-ledenfeest-"+stamp()+".txt";}
+ catch(e){$("status").textContent="Opslaan is niet gelukt. Probeer opnieuw in Chrome of Edge.";}
+});
+refresh();
+</script>
+</body></html>
