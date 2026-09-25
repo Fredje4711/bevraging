@@ -326,6 +326,7 @@ button{background:var(--blue);color:white;border:2px solid var(--blue)}button:di
 "use strict";
 const questions = JSON.parse(document.getElementById("questionData").textContent);
 const selected = new Set();
+let saving = false;
 const $ = id => document.getElementById(id);
 const letters = "ABCD";
 function el(tag, text, className) { const n=document.createElement(tag); if(text!==undefined)n.textContent=text;if(className)n.className=className;return n; }
@@ -338,7 +339,7 @@ function selectionText() {
 function refresh() {
  const size=selected.size;
  $("count").textContent=size+" van 10 gekozen";
- $("exportText").disabled=size!==10;
+ $("exportText").disabled=size!==10 || saving;
  for(const q of questions){
   const chosen=selected.has(q.id);
   $("pick-"+q.id).checked=chosen;
@@ -369,10 +370,28 @@ function download(content,type,filename){
  const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=el("a");a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);
 }
 function stamp(){return new Date().toISOString().slice(0,10);}
-$("exportText").addEventListener("click",()=>{
- if(selected.size!==10)return;
- try{download("\uFEFF"+selectionText(),"text/plain;charset=utf-8","quizkeuze-ledenfeest-"+stamp()+".txt");$("status").textContent="Download gestart: quizkeuze-ledenfeest-"+stamp()+".txt";}
- catch(e){$("status").textContent="Opslaan is niet gelukt. Probeer opnieuw in Chrome of Edge.";}
+$("exportText").addEventListener("click",async()=>{
+ if(selected.size!==10 || saving)return;
+ const filename="quizkeuze-ledenfeest-"+stamp()+".txt";
+ const content="\uFEFF"+selectionText();
+ saving=true;refresh();
+ let writable;
+ try{
+  if(typeof window.showSaveFilePicker === "function"){
+   const handle=await window.showSaveFilePicker({suggestedName:filename,types:[{description:"Tekstbestand",accept:{"text/plain":[".txt"]}}]});
+   writable=await handle.createWritable();
+   await writable.write(content);
+   await writable.close();
+   writable=null;
+   $("status").textContent="Opgeslagen als "+handle.name+" in de door u gekozen map.";
+  }else{
+   download(content,"text/plain;charset=utf-8",filename);
+   $("status").textContent="Deze browser biedt geen mapkeuze. Download gestart: "+filename+". Gebruik Chrome of Edge op een computer om zelf de map te kiezen.";
+  }
+ }catch(e){
+  if(writable){try{await writable.abort();}catch{}}
+  $("status").textContent=e.name==="AbortError"?"Opslaan geannuleerd. Uw vragen blijven aangevinkt.":"Opslaan is niet gelukt. Uw vragen blijven aangevinkt; probeer opnieuw.";
+ }finally{saving=false;refresh();}
 });
 refresh();
 </script>
