@@ -18,6 +18,8 @@ input[type=number],input[type=date],textarea{font:inherit;width:100%;min-height:
 .section-title{font-size:1.15rem;margin:24px 0 12px}.contributions{font-size:.9rem;margin:18px 0}.point-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.point-tags span{background:var(--pale);padding:5px 9px;border-radius:6px}.insights{display:grid;gap:12px}.insights article{border-left:3px solid var(--blue);padding:4px 0 4px 14px}.insights h4{margin:0 0 6px;font-size:1rem}.insights p{margin:0;font-size:.95rem}.local-intro{margin-top:24px;padding:18px;background:var(--pale);border-radius:12px}.local-intro h3{margin:0 0 8px;font-size:1.05rem}.local-intro p{font-size:.9rem}.local-intro a{font-size:.9rem;font-weight:bold;overflow-wrap:anywhere}
 
 .risk-scale{margin:24px 0 18px}.risk-track{position:relative;display:flex;height:19px;border-radius:10px;background:#ddd}.scale-low{width:25.925926%;background:#8fbf32;border-radius:10px 0 0 10px}.scale-medium{width:18.518519%;background:#f2b627}.scale-high{flex:1;background:#df5149;border-radius:0 10px 10px 0}.score-marker{position:absolute;top:-4px;height:27px;width:5px;background:#093c55;border:1px solid white;transform:translateX(-50%);box-shadow:0 0 0 1px #093c55;border-radius:2px}.score-marker:before{content:"";position:absolute;top:-9px;left:-4px;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid #093c55}.scale-ranges{display:grid;grid-template-columns:7fr 5fr 15fr;text-align:center;font-size:.78rem;color:var(--muted);margin-top:6px}
+
+.conclusion{margin:24px 0;padding:18px;background:#edf8fd;border:1px solid #c5e7f5;border-left:4px solid #23a9e4;border-radius:8px}.conclusion h3{margin:0 0 12px;font-size:1.15rem}.conclusion p:last-child{margin-bottom:0}
 </style></head>
 <body><main class="shell">
 <header><p class="brand">Diabetes Liga Midden-Limburg</p><h1>Jouw risico op diabetes type 2</h1><p>8 vragen. Je score wordt vanzelf berekend.</p></header>
@@ -32,7 +34,7 @@ input[type=number],input[type=date],textarea{font:inherit;width:100%;min-height:
 <div class="risk-scale" id="riskScale" role="img" aria-label=""><div class="risk-track"><span class="scale-low"></span><span class="scale-medium"></span><span class="scale-high"></span><span id="scoreMarker" class="score-marker"></span></div><div class="scale-ranges" aria-hidden="true"><span>0–6</span><span>7–11</span><span>12–26</span></div></div>
 <h2 id="resultTitle" tabindex="-1"></h2><p id="advice"></p>
 <h3 class="section-title">Wat jouw antwoorden vertellen</h3><div id="personalInsights" class="insights"></div>
-<p class="result-note">Dit is een risico-inschatting, geen diagnose. Ook een lage score sluit diabetes niet uit. Bij klachten of twijfel: raadpleeg je huisarts.</p>
+<section class="conclusion" aria-labelledby="conclusionTitle"><h3 id="conclusionTitle">Besluit — wat betekent dit voor jou?</h3><p id="conclusionText"></p><p class="result-note" id="conclusionNote"></p></section>
 <div class="result-actions"><button class="primary" id="save" type="button">Download mijn persoonlijke verslag</button></div>
 <p class="quiet">4 pagina's met je antwoorden, gerichte tips en onze contactgegevens.</p><p id="saveStatus" class="status" role="status"></p>
 <aside class="local-intro"><h3>Diabetes Liga Midden-Limburg</h3><p>Ontdek onze infosessies, wandelingen en andere activiteiten. Spreek ons aan op de stand: we maken graag kennis met je.</p><a href="https://www.dlml.be" target="_blank" rel="noopener noreferrer">Ontdek onze werking op www.dlml.be</a></aside>
@@ -156,6 +158,16 @@ function personalReport(a,score){
  return {items,focus,contributors,next:score>=12?'Maak een afspraak bij je huisarts. Bespreek je score en vraag naar onderzoek van je bloedsuiker.':p('glucose')?'Bespreek de eerder verhoogde bloedsuiker met je huisarts, ook bij deze totaalscore.':score>=7?'Kies een haalbare leefstijlstap en herhaal de test over 3 jaar. Bespreek eerder met je huisarts als je twijfelt of klachten hebt.':'Houd je gezonde gewoontes vast en herhaal de test over 3 jaar. Neem bij klachten of twijfel eerder contact op met je huisarts.'};
 }
 
+// Eén gedeeld slotbesluit voor scherm en PDF; verandert de score niet.
+function finalConclusion(a,score){
+ const category=score>=12?'De test wijst op een sterk verhoogd risico op diabetes type 2.':score>=7?'De test wijst op een licht verhoogd risico op diabetes type 2.':'De test wijst op weinig risico op diabetes type 2.';
+ let step;
+ if(score>=12)step='Maak een afspraak bij je huisarts voor een nuchtere bloedafname. Zo kan worden onderzocht of je bloedsuiker verhoogd is of diabetes aanwezig is.';
+ else if(a.glucose?.points)step='Omdat bij jou eerder een verhoogde bloedsuiker is vastgesteld, bespreek je met je huisarts of verdere controle nodig is. Wacht daarmee niet tot een volgende risicotest.';
+ else step=''+(score>=7?'Pak de genoemde aandachtspunten aan.':'Blijf aandacht houden voor gezonde gewoonten.')+' Herhaal de test over drie jaar; raadpleeg bij klachten of twijfel eerder je huisarts.';
+ return {text:category+' '+step,note:'Deze score stelt geen diagnose en bepaalt geen stadium van diabetes. Ook een lage score sluit diabetes niet uit.'};
+}
+
 /* The report stays on this device until the visitor saves or shares it. */
 async function createResultPDF(score,date,result,answerData){
  if(!answerData||!questions.every(q=>answerData[q.id]))throw new Error('Alle acht antwoorden zijn nodig voor een persoonlijk verslag.');
@@ -163,7 +175,7 @@ async function createResultPDF(score,date,result,answerData){
  const doc=await PDFDocument.create();doc.setTitle('Mijn persoonlijke risicoverslag - Diabetes Liga Midden-Limburg');doc.setAuthor('Diabetes Liga Midden-Limburg');
  const normal=await doc.embedFont(StandardFonts.Helvetica),bold=await doc.embedFont(StandardFonts.HelveticaBold);
  const ink=rgb(.06,.235,.32),blue=rgb(.137,.663,.894),muted=rgb(.32,.41,.46),pale=rgb(.93,.97,.99),dark=rgb(0,.34,.5);
- let page,y;const W=507;const profile=personalReport(answerData,score);
+ let page,y;const W=507;const profile=personalReport(answerData,score),conclusion=finalConclusion(answerData,score);
  const clean=s=>String(s).replace(/[–—]/g,'-').replace(/≥/g,'vanaf ');
  const rect=(x,t,w,h,color)=>page.drawRectangle({x,y:841.89-t-h,width:w,height:h,color});
  function text(s,x,t,size=11,font=normal,color=ink){page.drawText(clean(s),{x,y:841.89-t-size,size,font,color});}
@@ -174,16 +186,23 @@ async function createResultPDF(score,date,result,answerData){
  function link(label,url,x,t,size=11){text(label,x,t,size,bold,dark);const a=doc.context.obj({Type:'Annot',Subtype:'Link',Rect:[x,841.89-t-size-3,x+bold.widthOfTextAtSize(label,size),841.89-t+2],Border:[0,0,0],A:{Type:'Action',S:'URI',URI:PDFString.of(url)}});page.node.addAnnot(doc.context.register(a));}
  function newPage(title,n){page=doc.addPage([595.28,841.89]);rect(0,0,595.28,7,blue);text('DIABETES LIGA MIDDEN-LIMBURG',44,28,10,bold,dark);text(title,44,52,24,bold);text('Testdatum: '+date,44,88,10,normal,muted);rect(44,786,W,1,rgb(.8,.87,.9));link('www.dlml.be','https://www.dlml.be',44,801,10);text(`Persoonlijk risicoverslag | ${n} / 4`,375,801,9,normal,muted);y=120;}
  newPage('Jouw resultaat en aandachtspunten',1);
- rect(44,120,W,153,pale);text(String(score),62,128,56,bold,dark);text('/ 26 punten',65,190,11,normal,muted);text(result.name,190,143,18,bold);text(result.zone,190,176,11,normal,muted);
- const barX=62,barW=471,barY=228;
+ rect(44,120,W,125,pale);text(String(score),62,128,56,bold,dark);text('/ 26 punten',65,190,11,normal,muted);text(result.name,190,143,18,bold);text(result.zone,190,176,11,normal,muted);
+ const barX=62,barW=471,barY=205;
  rect(barX,barY,barW*7/27,12,rgb(.56,.75,.20));rect(barX+barW*7/27,barY,barW*5/27,12,rgb(.95,.71,.15));rect(barX+barW*12/27,barY,barW*15/27,12,rgb(.87,.32,.29));
  const markerX=barX+barW*(score+.5)/27;rect(markerX-3,barY-4,6,20,rgb(1,1,1));rect(markerX-1.5,barY-4,3,20,ink);
- text('0-6',barX+barW*3.5/27-8,247,9,normal,muted);text('7-11',barX+barW*9.5/27-10,247,9,normal,muted);text('12-26',barX+barW*19.5/27-12,247,9,normal,muted);y=296;
+ text('0-6',barX+barW*3.5/27-8,224,9,normal,muted);text('7-11',barX+barW*9.5/27-10,224,9,normal,muted);text('12-26',barX+barW*19.5/27-12,224,9,normal,muted);y=258;
  heading('Wat betekent dit voor jou?');para(profile.next,12);
  para('Deze test geeft een risico-inschatting, geen diagnose. Ook een lage score sluit diabetes niet uit.',10,muted);
  heading('Dit valt op in jouw antwoorden');
  for(const item of profile.focus)block(item.title,item.text);
- para('Bij klachten of twijfel: raadpleeg je huisarts. Dit verslag helpt het gesprek voorbereiden en vervangt geen medisch onderzoek of persoonlijk behandeladvies.',10,muted);
+ const conclusionLines=wrap(conclusion.text,W-30,11),noteLines=wrap(conclusion.note,W-30,10);
+ const boxHeight=43+conclusionLines.length*15.95+10+noteLines.length*14.5+12;
+ if(y+boxHeight>767)throw new Error('Besluit past niet op de pagina.');
+ page.drawRectangle({x:44,y:841.89-y-boxHeight,width:W,height:boxHeight,color:rgb(.93,.975,.995),borderColor:rgb(.77,.90,.96),borderWidth:.7});
+ rect(44,y,3,boxHeight,blue);
+ text('Besluit - wat betekent dit voor jou?',59,y+12,14,bold,dark);
+ y+=43;for(const line of conclusionLines){text(line,59,y,11);y+=15.95;}
+ y+=10;for(const line of noteLines){text(line,59,y,10,normal,muted);y+=14.5;}y+=12;
  newPage('Jouw antwoorden',2);
  para('Dit heb je ingevuld. Controleer het overzicht; een vergissing kun je in de test verbeteren voordat je een nieuw verslag bewaart.',11);
  for(const q of questions){const a=answerData[q.id];const ls=wrap(a.text,438,11);const h=27+ls.length*15;rect(44,y,W,h,pale);text(q.label,55,y+7,11,bold);ls.forEach((line,i)=>text(line,55,y+26+i*15,11));y+=h+10;}
@@ -252,6 +271,7 @@ function showResult(){
  $('score').textContent=score;$('date').textContent=resultDate;$('risk').textContent=r.name;$('risk').className='risk '+r.level;$('resultTitle').textContent=r.title;$('advice').textContent=profile.next;
  $('scoreMarker').style.left=((score+.5)/27*100)+'%';$('riskScale').setAttribute('aria-label',`Jouw score: ${score} van 26. ${r.name}. Groen: weinig risico; geel: licht verhoogd risico; rood: sterk verhoogd risico.`);
  $('personalInsights').innerHTML=profile.focus.map(item=>`<article><h4>${escapeHTML(item.title)}</h4><p>${escapeHTML(item.text)}</p></article>`).join('');
+ const conclusion=finalConclusion(answers,score);$('conclusionText').textContent=conclusion.text;$('conclusionNote').textContent=conclusion.note;
  $('breakdown').innerHTML=questions.map(q=>`<li><strong>${escapeHTML(q.label)}</strong><span>${escapeHTML(answers[q.id].text)}</span></li>`).join('');$('saveStatus').textContent='';$('restartConfirm').hidden=true;$('resultTitle').focus({preventScroll:true});window.scrollTo(0,0);
 }
 $('questionForm').addEventListener('submit',event=>{event.preventDefault();if(!validate())return;if(current<7){current++;render();}else showResult();});
